@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Major Project</title>
+    <link rel="stylesheet" href="landing_page.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon">
+    <style>
+        /* Style for the loading bar */
+        .loading-bar {
+            width: 0%;
+            height: 4px;
+            background-color: #007bff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            transition: width 0.4s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading bar -->
+    <div class="loading-bar" id="loadingBar"></div>
+
+    <div class="container">
+        <h1>Choose an Option</h1>
+        <a target="_blank" id="facialDetection" href="index.html">Facial Detection</a>
+        <a target="_blank" id="alertDetection" href="index1.html">Alert Detection</a>
+    </div>
+
+    <script>
+        // Function to show loading bar and navigate to the desired page
+        function navigateToPage(url) {
+            // Show loading bar
+            document.getElementById("loadingBar").style.width = "100%";
+
+            // Navigate to the desired page after a short delay
+            setTimeout(function() {
+                window.location.href = url;
+            }, 500); // Adjust the delay as needed
+        }
+
+        // Event listeners for the options
+        document.getElementById("facialDetection").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            navigateToPage("index1.html");
+        });
+
+        document.getElementById("alertDetection").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            navigateToPage("index.html");
+        });
+
+        // Initialize SpeechRecognition object
+        const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+
+        // Set properties for speech recognition
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        // Event listener for when speech recognition results are available
+        recognition.onresult = function(event) {
+            const result = event.results[0][0].transcript.toLowerCase(); // Get the recognized transcript
+
+            // Check if the recognized command matches facial detection or alert detection
+            if (result.includes('facial detection')) {
+                navigateToPage("index1.html");
+            } else if (result.includes('alert detection')) {
+                navigateToPage("index.html");
+            }
+        };
+
+        // Start speech recognition immediately
+        recognition.start();
+    </script>
+</body>
+</html>
